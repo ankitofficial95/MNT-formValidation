@@ -24,8 +24,10 @@
   </head>
   <body>
     <div>
-      <h1 class="header">Welcome to Amazon</h1>
-      <h2 class="header">Registration page</h2>
+      <div class="header">
+        <h1>Welcome to the AMAZON</h1>
+        <h2>Registration Page</h2>
+      </div>
 
       <!-- JavaScript function that will be executed when the form is submitted. -->
       <!-- POST method is not working , so I used GET(not prefferable) method Here -->
@@ -65,7 +67,11 @@
         </div>
 
         <input class="but fontt" type="submit" value="Register"/>
+        <input class="but fontt" type="button" value="Login" onclick="window.location.href='login.html'" />
       </form>
+
+      <div class="footer">Copyrights to Amazon</div>
+
     </div>
     <script src="index.js"></script>
   </body>

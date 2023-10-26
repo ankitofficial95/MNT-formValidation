@@ -53,13 +53,14 @@ function validateForm() {
   }
 
   const cpassword = document.querySelector('input[name="fcpass"]').value;
+
   if (cpassword !== password) {
     seterror("cpass", "*Password and Confirm password should match!");
     returnval = false;
   }
 
-  userName = document.querySelector('input[name="fname"]').value;
-  passWord = document.querySelector('input[name="fpass"]').value;
+  // userName = document.querySelector('input[name="fname"]').value;
+  // passWord = document.querySelector('input[name="fpass"]').value;
 
   if (returnval) {
     window.alert("Registration successful !!!");
@@ -67,6 +68,7 @@ function validateForm() {
 
     window.localStorage.setItem("email", email);
     window.localStorage.setItem("password", password);
+    window.localStorage.setItem("name", name);
 
     redirectToLoginPage();
   } else {
