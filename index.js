@@ -94,9 +94,12 @@ function validateEmailPass() {
 
   if (enteredEmail == storedEmail && enteredPassword == storedPassword) {
     window.alert("Login successful !!!");
+
+    setUserNameToLoginPage();
   } else {
     window.alert("Login failed. Please check your email and password.");
   }
+
   return false;
 }
 
@@ -104,4 +107,9 @@ function redirectToLoginPage() {
   // console.log("inside redirectToLoginPage");
   window.location.href = "login.html";
   return false;
+}
+
+function setUserNameToLoginPage() {
+  let user = 'Hello: ' + window.localStorage.getItem("name");
+  document.getElementById("userName").innerHTML = user;
 }
