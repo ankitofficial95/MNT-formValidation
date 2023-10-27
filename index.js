@@ -14,6 +14,11 @@ function seterror(id, error) {
   element.innerHTML = error;
 }
 
+
+const usersArray = JSON.parse(localStorage.getItem("users")) || [];
+// console.log('users array-->>>>>>>>>');
+// console.log(usersArray);
+
 function validateForm() {
   // console.log("inside validateForm");
 
@@ -47,6 +52,11 @@ function validateForm() {
   }
 
   const password = document.querySelector('input[name="fpass"]').value;
+
+  if (password.length === 0) {
+    seterror("pass", "*Password should not be Blank !!");
+    returnval = false;
+  }
   if (password.length < 6) {
     seterror("pass", "*Password should be at least 6 characters long!");
     returnval = false;
@@ -54,23 +64,34 @@ function validateForm() {
 
   const cpassword = document.querySelector('input[name="fcpass"]').value;
 
-  if (cpassword !== password) {
-    seterror("cpass", "*Password and Confirm password should match!");
+  if (cpassword.length === 0) {
+    seterror("cpass", "*Confirm password is required");
+    returnval = false;
+  } else if (cpassword !== password) {
+    seterror("cpass", "*Password and Confirm password should match");
     returnval = false;
   }
-
-  // userName = document.querySelector('input[name="fname"]').value;
-  // passWord = document.querySelector('input[name="fpass"]').value;
+  //-----------------------------------------------------------------------------------------
 
   if (returnval) {
     window.alert("Registration successful !!!");
-    window.localStorage.clear();
+    const newUser = {
+      name: name,
+      email: email,
+      password: password,
+    };
 
-    window.localStorage.setItem("email", email);
-    window.localStorage.setItem("password", password);
-    window.localStorage.setItem("name", name);
+   
+    usersArray.push(newUser);
+
+    const usersArrayString = JSON.stringify(usersArray);
+
+    localStorage.setItem("users", usersArrayString);
+
+    window.location.href = 'login.html'
 
     redirectToLoginPage();
+    
   } else {
     window.alert("Registration failed. Please check your input.");
   }
@@ -86,21 +107,32 @@ function validateEmail(email) {
 }
 
 function validateEmailPass() {
-  let enteredEmail = document.querySelector('input[name="femail"]').value;
-  let enteredPassword = document.querySelector('input[name="fpass"]').value;
+  const enteredEmail = document.querySelector('input[name="femail"]').value;
+  const enteredPassword = document.querySelector('input[name="fpass"]').value;
 
-  let storedEmail = window.localStorage.getItem("email");
-  let storedPassword = window.localStorage.getItem("password");
+  const usersArrayString = localStorage.getItem("users");
+  const usersArray = JSON.parse(usersArrayString) || [];
 
-  if (enteredEmail == storedEmail && enteredPassword == storedPassword) {
-    window.alert("Login successful !!!");
 
-    setUserNameToLoginPage();
-  } else {
-    window.alert("Login failed. Please check your email and password.");
+  if (usersArray.length === 0) {
+    window.alert("No users registered. Please register first.");
+    return false;
   }
 
-  return false;
+  const foundUser = usersArray.find(
+    (user) => user.email === enteredEmail && user.password === enteredPassword
+  );
+
+   if (foundUser) {
+    window.alert("Login successful !!!");
+    document.querySelector('input[name="femail"]').value = "";
+    document.querySelector('input[name="fpass"]').value = "";
+    setUserNameToLoginPage(foundUser.name); // Pass the user's name to display on the login page
+    return false;
+  } else {
+    window.alert("Login failed. Please check your email and password.");
+    return false;
+  }
 }
 
 function redirectToLoginPage() {
@@ -109,7 +141,7 @@ function redirectToLoginPage() {
   return false;
 }
 
-function setUserNameToLoginPage() {
-  let user = 'Hello: ' + window.localStorage.getItem("name");
+function setUserNameToLoginPage(userName) {
+  let user = "Hello: " + userName;
   document.getElementById("userName").innerHTML = user;
 }
